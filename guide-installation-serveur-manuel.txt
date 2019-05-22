@@ -75,7 +75,6 @@ sudo zcat /usr/share/doc/openvpn/examples/sample-config-files/server.conf.gz > /
 
 Solution 2:
 sudo gedit /etc/openvpn/server.conf
-Copier dans le presse-papier
 
 Dans ce fichier on met le contenu suivant :
 
