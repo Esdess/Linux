@@ -15,30 +15,28 @@ cd /etc/openvpn/easy-rsa
 
 # On change l'utilisateur des fichiers
 sudo chown -R $USER /etc/openvpn/easy-rsa/
-On a dorénavant les fichiers nécessaire pour configurer le serveur.
+#On a dorénavant les fichiers nécessaire pour configurer le serveur.
 
 
 # Configuration du serveur OpenVPN
-On configure en premier lieu l’authentification par clés et certificats. Pour cela, on modifie le fichier /etc/openvpn/easy-rsa/vars :
+#On configure en premier lieu l’authentification par clés et certificats. Pour cela, on modifie le fichier /etc/openvpn/easy-rsa/vars :
 sudo nano /etc/openvpn/easy-rsa/vars
 
-Ce fichier correspond aux paramètres de création de clés et certificats. On laisse les valeurs par défaut de la plupart des options, on modifie principalement les lignes à la fin du fichier correspondant aux valeurs par défaut des informations qui seront dans les certificats. Par défaut elles sont :
+#Ce fichier correspond aux paramètres de création de clés et certificats. On laisse les valeurs par défaut de la plupart des options, on #modifie principalement les lignes à la fin du fichier correspondant aux valeurs par défaut des informations qui seront dans les #certificats. Par défaut elles sont :
 
-export KEY_COUNTRY="US"
-export KEY_PROVINCE="CA"
-export KEY_CITY="SanFrancisco"
-export KEY_ORG="Fort-Funston"
-export KEY_EMAIL="me@myhost.mydomain"
-Télécharger - Copier dans le presse-papier
-Il faut les modifier par des valeurs correspondant au serveur, dans notre cas :
+#export KEY_COUNTRY="US"
+#export KEY_PROVINCE="CA"
+#export KEY_CITY="SanFrancisco"
+#export KEY_ORG="Fort-Funston"
+#export KEY_EMAIL="me@myhost.mydomain"
+#Il faut les modifier par des valeurs correspondant au serveur, dans notre cas :
 
-export KEY_COUNTRY="FR"
-export KEY_PROVINCE="75"
-export KEY_CITY="Paris"
-export KEY_ORG="Arscenic"
-export KEY_EMAIL="contact@arscenic.org"
-Télécharger - Copier dans le presse-papier
-L’étape suivante correspond à la génération de la clé et du certificat du serveur. On lance les commandes suivantes :
+#export KEY_COUNTRY="FR"
+#export KEY_PROVINCE="75"
+#export KEY_CITY="Paris"
+#export KEY_ORG="Arscenic"
+#export KEY_EMAIL="contact@arscenic.org"
+#L’étape suivante correspond à la génération de la clé et du certificat du serveur. On lance les commandes suivantes :
 
 # On se déplace dans le répertoire de configuration
 cd /etc/openvpn/easy-rsa/
