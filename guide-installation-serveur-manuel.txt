@@ -1,34 +1,36 @@
-Installation du serveur OpenVPN
-Pour l’installation, on va utiliser la version fournie par les dépots officiels de Debian. On utilise donc APT pour cela :
+#Installation du serveur OpenVPN
+#Pour lâ€™installation, on va utiliser la version fournie par les dÃ©pots officiels de Debian. On utilise donc APT pour cela :
 
 sudo apt-get install openvpn
-Copier dans le presse-papier
+#Copier dans le presse-papier
 
-Préconfiguration
-Le paquet openvpn fournit des examples de configuration, on les copie donc dans le répertoire de configuration pour les modifier ensuite :
+#PrÃ©configuration
+#Le paquet openvpn fournit des examples de configuration, on les copie donc dans le rÃ©pertoire de configuration pour les modifier ensuite :
+#passage en mode root
+sudo -i
 
-#Création du répertoire easy-rsa
+#CrÃ©ation du rÃ©pertoire easy-rsa
 sudo apt-get install easy-rsa
-make-cadir /etc/openvpn/easy-rsa #créer tout les fichiers de config
+make-cadir /etc/openvpn/easy-rsa #crÃ©er tout les fichiers de config
 cd /etc/openvpn/easy-rsa
 
 # On change l'utilisateur des fichiers
 sudo chown -R $USER /etc/openvpn/easy-rsa/
-On a dorénavant les fichiers nécessaire pour configurer le serveur.
+On a dorÃ©navant les fichiers nÃ©cessaire pour configurer le serveur.
 
 
 # Configuration du serveur OpenVPN
-On configure en premier lieu l’authentification par clés et certificats. Pour cela, on modifie le fichier /etc/openvpn/easy-rsa/vars :
+On configure en premier lieu lâ€™authentification par clÃ©s et certificats. Pour cela, on modifie le fichier /etc/openvpn/easy-rsa/vars :
 sudo nano /etc/openvpn/easy-rsa/vars
 
-Ce fichier correspond aux paramètres de création de clés et certificats. On laisse les valeurs par défaut de la plupart des options, on modifie principalement les lignes à la fin du fichier correspondant aux valeurs par défaut des informations qui seront dans les certificats. Par défaut elles sont :
+Ce fichier correspond aux paramÃ¨tres de crÃ©ation de clÃ©s et certificats. On laisse les valeurs par dÃ©faut de la plupart des options, on modifie principalement les lignes Ã  la fin du fichier correspondant aux valeurs par dÃ©faut des informations qui seront dans les certificats. Par dÃ©faut elles sont :
 
 export KEY_COUNTRY="US"
 export KEY_PROVINCE="CA"
 export KEY_CITY="SanFrancisco"
 export KEY_ORG="Fort-Funston"
 export KEY_EMAIL="me@myhost.mydomain"
-Télécharger - Copier dans le presse-papier
+TÃ©lÃ©charger - Copier dans le presse-papier
 Il faut les modifier par des valeurs correspondant au serveur, dans notre cas :
 
 export KEY_COUNTRY="FR"
@@ -36,40 +38,40 @@ export KEY_PROVINCE="75"
 export KEY_CITY="Paris"
 export KEY_ORG="Arscenic"
 export KEY_EMAIL="contact@arscenic.org"
-Télécharger - Copier dans le presse-papier
-L’étape suivante correspond à la génération de la clé et du certificat du serveur. On lance les commandes suivantes :
+TÃ©lÃ©charger - Copier dans le presse-papier
+Lâ€™Ã©tape suivante correspond Ã  la gÃ©nÃ©ration de la clÃ© et du certificat du serveur. On lance les commandes suivantes :
 
-# On se déplace dans le répertoire de configuration
+# On se dÃ©place dans le rÃ©pertoire de configuration
 cd /etc/openvpn/easy-rsa/
 #lien symbolique
 ln -s openssl-1.0.0.cnf openssl.cnf
-# On charge les valeurs par défaut
+# On charge les valeurs par dÃ©faut
 source vars
-# On nettoie ce qui existe au cas où
+# On nettoie ce qui existe au cas oÃ¹
 ./clean-all
 ./build-dh
-# Génération de la clé privée ca du serveur dans keys/ca.key
+# GÃ©nÃ©ration de la clÃ© privÃ©e ca du serveur dans keys/ca.key
 ./pkitool --initca
-# Génération de la clé privée du serveur dans keys/server.key et du certificat dans keys/server.crt
+# GÃ©nÃ©ration de la clÃ© privÃ©e du serveur dans keys/server.key et du certificat dans keys/server.crt
 ./pkitool --server server
-# Génération de la clé du serveur dans keys/ta.key
+# GÃ©nÃ©ration de la clÃ© du serveur dans keys/ta.key
 sudo openvpn --genkey --secret keys/ta.key
-Télécharger - Copier dans le presse-papier
-Les fichiers keys/ca.crt, keys/ta.key, keys/server.crt, keys/server.key et keys/dh1024.pem sont nécessaire pour l’identification au serveur, on les copie dans /etc/openvpn/ :
+TÃ©lÃ©charger - Copier dans le presse-papier
+Les fichiers keys/ca.crt, keys/ta.key, keys/server.crt, keys/server.key et keys/dh1024.pem sont nÃ©cessaire pour lâ€™identification au serveur, on les copie dans /etc/openvpn/ :
 
 sudo cp keys/ca.crt keys/ta.key keys/server.crt keys/server.key keys/dh2048.pem /etc/openvpn/
 
 
-On crée ensuite deux répertoires :
+On crÃ©e ensuite deux rÃ©pertoires :
 
-/etc/openvpn/jail où sera chrooté le processus du serveur OpenVPN ;
-/etc/openvpn/clientconf où seront stockés les fichiers de configuration des utilisateurs qui seront créés par la suite ;
+/etc/openvpn/jail oÃ¹ sera chrootÃ© le processus du serveur OpenVPN ;
+/etc/openvpn/clientconf oÃ¹ seront stockÃ©s les fichiers de configuration des utilisateurs qui seront crÃ©Ã©s par la suite ;
 
 sudo mkdir /etc/openvpn/jail
 sudo mkdir /etc/openvpn/clientconf
-Télécharger - Copier dans le presse-papier
+TÃ©lÃ©charger - Copier dans le presse-papier
 
-On crée ensuite le fichier de configuration à proprement dit du serveur /etc/openvpn/server.conf :
+On crÃ©e ensuite le fichier de configuration Ã  proprement dit du serveur /etc/openvpn/server.conf :
 
 Solution 1:
 sudo -i
@@ -82,14 +84,14 @@ Copier dans le presse-papier
 Dans ce fichier on met le contenu suivant :
 
 # Serveur TCP/444
-# On utilise le port 444 car le 443 est souvent utilisé par apache ssl
+# On utilise le port 444 car le 443 est souvent utilisÃ© par apache ssl
 mode server
 proto tcp
 port 444
 dev tun
  
 # Cles et certificats
-# On utilise les clés et certifcats générés
+# On utilise les clÃ©s et certifcats gÃ©nÃ©rÃ©s
 ca ca.crt
 cert server.crt
 key server.key
@@ -98,8 +100,8 @@ tls-auth ta.key 0
 cipher AES-256-CBC
  
 # Reseau
-# La machine connectée sera dans le sous-réseau 10.8.0.0
-# Les DNS utilisés seront ceux de google
+# La machine connectÃ©e sera dans le sous-rÃ©seau 10.8.0.0
+# Les DNS utilisÃ©s seront ceux de google
 server 10.8.0.0 255.255.255.0
 push "redirect-gateway def1 bypass-dhcp"
 push "dhcp-option DNS 4.4.4.4"
@@ -107,8 +109,8 @@ push "dhcp-option DNS 8.8.8.8"
 keepalive 10 120
  
 # Securite
-# Configuration de la sécurité du serveur
-# Le processus sera chrooté dans /etc/openvpn/jail
+# Configuration de la sÃ©curitÃ© du serveur
+# Le processus sera chrootÃ© dans /etc/openvpn/jail
 user nobody
 group nogroup
 chroot /etc/openvpn/jail
@@ -117,8 +119,8 @@ persist-tun
 comp-lzo
  
 # Log
-# Configuration de la manière dont les fichiers de logs fonctionnent
-# Enlever le ";" de la dernière ligne pour activer les logs
+# Configuration de la maniÃ¨re dont les fichiers de logs fonctionnent
+# Enlever le ";" de la derniÃ¨re ligne pour activer les logs
 verb 3
 mute 20
 status /var/log/openvpn-status.log
@@ -128,6 +130,9 @@ log-append /var/log/openvpn.log
 Lancement du serveur
 sudo service openvpn stop
 sudo openvpn /etc/openvpn/server.conf
+
+#vÃ©rifier le lancement
+#ps -aux |grep
 
 SOURCES
 https://doc.ubuntu-fr.org/openvpn
