@@ -2,7 +2,6 @@
 #Pour l’installation, on va utiliser la version fournie par les dépots officiels de Debian. On utilise donc APT pour cela :
 
 sudo apt-get install openvpn
-#Copier dans le presse-papier
 
 #Préconfiguration
 #Le paquet openvpn fournit des examples de configuration, on les copie donc dans le répertoire de configuration pour les modifier ensuite :
@@ -56,11 +55,9 @@ source vars
 ./pkitool --server server
 # Génération de la clé du serveur dans keys/ta.key
 sudo openvpn --genkey --secret keys/ta.key
-Télécharger - Copier dans le presse-papier
-Les fichiers keys/ca.crt, keys/ta.key, keys/server.crt, keys/server.key et keys/dh1024.pem sont nécessaire pour l’identification au serveur, on les copie dans /etc/openvpn/ :
+#Les fichiers keys/ca.crt, keys/ta.key, keys/server.crt, keys/server.key et keys/dh1024.pem sont nécessaire pour l’identification au serveur, on les copie dans /etc/openvpn/ :
 
 sudo cp keys/ca.crt keys/ta.key keys/server.crt keys/server.key keys/dh2048.pem /etc/openvpn/
-
 
 On crée ensuite deux répertoires :
 
@@ -69,7 +66,6 @@ On crée ensuite deux répertoires :
 
 sudo mkdir /etc/openvpn/jail
 sudo mkdir /etc/openvpn/clientconf
-Télécharger - Copier dans le presse-papier
 
 On crée ensuite le fichier de configuration à proprement dit du serveur /etc/openvpn/server.conf :
 
